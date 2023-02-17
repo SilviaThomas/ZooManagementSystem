@@ -83,7 +83,7 @@
             }
             ?>
             <h1 class="h3 mb-4 text-gray-800">Vacancy</h1>
-            <form action="" method="post">
+            <form action="#" method="post">
                 <input type="hidden" name="vacancy_id" value="">
                 <div class="mb-4 field-required">
                     <label for="class_display_name">Position</label>

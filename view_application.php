@@ -78,7 +78,7 @@ require 'dbconnection.php'
                         
                         $count = 1;
 
-                        $query = "SELECT * FROM tbl_application natural join tbl_vaccancy where status='1'";
+                        $query = "SELECT * FROM tbl_application natural join tbl_vaccancy ";
                         $query_run = mysqli_query($conn, $query);
 
                         if(mysqli_num_rows($query_run) > 0) 
@@ -99,15 +99,30 @@ require 'dbconnection.php'
                                     <td><a href="../../files/cv/<?= $application['a_cv'] ?>" class="btn btn-secondary">Download</a></td>
                                     <td><?php echo $res['vaccancy_position']; ?></td>
                                     <td>
-                                        <a href="animaledit.php?id=<?=$animal['animal_id'];?>" class="btn btn-success btn-sm">Approve</a> 
-                                        <!-- <form action="code.php" method="POST" class="d-inline">
-                                                        <button type="submit" name="delete_animal" value="<?=$animal['id'];?>" class="btn btn-danger btn-sm">Delete</button>
-                                          -->
-                                          <a href="animaldelete.php?id=<?=$animal['animal_id'];?>" class="btn btn-danger btn-sm">Reject</a>
-                                          
-                                    </td>
-                                    </tr>
-                                <?php
+                                    <td>
+
+                                    <?php
+                                      if('status'==1){
+                                        echo '<p><b><a href="pending.php?id='.$res['application_id'].'$status=0"style="color:Green;font-size:17px;">Approve</a></b></p>';
+                                      }else{
+                                        echo '<p><b><a href="pending.php?id='.$res['application_id'].'$status=0"style="color:Green;font-size:17px;">Approve</a></b></p>';
+                                      }
+                                      ?>
+                                      </td>
+
+                                      <td>
+              
+                                    <?php
+                                              if($row['status']==0){
+                                                echo '<p><b><a href="reject.php?id='.$row['application_id'].'$status=1"style="color:red;font-size:17px;">Reject</a></b></p>';
+                                              }else{
+                                                echo '<p><b><a href="reject.php?id='.$row['application_id'].'$status=1"style="color:red;font-size:17px;">Reject</a></b></p>';
+                                              }
+                                              ?>
+                                                          </td>
+                                                          
+                                                          </tr>
+                                                      <?php
 
 
                             }

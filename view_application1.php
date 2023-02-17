@@ -23,7 +23,7 @@ require 'dbconnection.php'
   <meta name="description" content="">
   <meta name="author" content="">
   <link href="img/logo/logo.png" rel="icon">
-  <title>Admin - manage Animals</title>
+  <title>job application</title>
   <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
   <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" type="text/css">
   <link href="css/ruang-admin.min.css" rel="stylesheet">
@@ -43,7 +43,7 @@ require 'dbconnection.php'
         <!-- Container Fluid-->
         <div class="container-fluid" id="container-wrapper">
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Animals</h1>
+            <h1 class="h3 mb-0 text-gray-800">view job application</h1>
             <ol class="breadcrumb">
               <li class="breadcrumb-item"><a href="dashboard.php">Home</a></li>
               <li class="breadcrumb-item active" aria-current="page">Manage Animals</li>
@@ -64,41 +64,49 @@ require 'dbconnection.php'
                   <table class="table align-items-center table-flush table-hover" id="dataTableHover">
                     <thead class="thead-light">
                       <tr>
-                        <!-- <th>No.</th> -->
-                        <th>Cage Number</th>
-                        <th>Animal Name</th>
-                        <th>Animal Breed</th>
-                        <th>Creation Date</th>
-                        <th>Action</th>
+                      <th scope="col">#</th>
+                                        <th scope="col">Applicant Fullname</th>
+                                        <th scope="col">Email</th>
+                                        <th scope="col">Phone</th>
+                                        <th scope="col">CV</th>
+                                        <th scope="col">Applied Position</th>
+                                        <th scope="col">Actions/Info</th>
                       </tr>
                       </thead>
                       <tbody>
                         <?php
-                        $query = "SELECT * FROM tbl_animals where status='1'";
+                        
+                        $count = 1;
+
+                        $query = "SELECT * FROM tbl_application natural join tbl_vaccancy where status='1'";
                         $query_run = mysqli_query($conn, $query);
 
                         if(mysqli_num_rows($query_run) > 0) 
                         {
-                            foreach($query_run as $animal)
+                            foreach($query_run as $application)
                             {
                                 //echo $animal["AnimalName"]
+                                $vacancy_id=$application['vaccancy_id'];
+                                $query_app= "select *from tbl_vaccancy where vaccancy_id='$vacancy_id'";
+                                $app=mysqli_query($conn,$query_app);
+                                $res=mysqli_fetch_array($app);
                                 ?>
                                 <tr>
-                                    <!-- <td><?=$animal['animal_id'];?></td> -->
-                                    <td><?=$animal['CageNumber'];?></td>
-                                    <td><?=$animal['AnimalName'];?></td>
-                                    <td><?=$animal['Breed'];?></td>
-                                    <td><?=$animal['CreationDate'];?></td>
-                                  
+                                    <td scope="row"><?= $count++ ?></td>
+                                    <td><?=$application['fullname'];?></td>
+                                    <td><?=$application['email'];?></td>
+                                    <td><?=$application['phone'];?></td>
+                                    <td><a href="../../files/cv/<?= $application['a_cv'] ?>" class="btn btn-secondary">Download</a></td>
+                                    <td><?php echo $res['vaccancy_position']; ?></td>
                                     <td>
-                                        <a href="animaledit.php?id=<?php echo $animal['animal_id'];?>" class="btn btn-success btn-sm">Edit</a> 
+                                       
+                                        <a href="approval.php?id=<?php echo $application['application_id'];?>"class="btn btn-success btn-sm">Approve</a> 
                                         <!-- <form action="code.php" method="POST" class="d-inline">
                                                         <button type="submit" name="delete_animal" value="<?=$animal['id'];?>" class="btn btn-danger btn-sm">Delete</button>
                                           -->
-                                          <a href="animaldelete.php?id=<?php echo $animal['animal_id']; ?>" class="btn btn-danger btn-sm">DELETE</a>
+                                          <a href="reject.php?id=<?php echo $application['application_id'];?>"class="btn btn-danger btn-sm">Reject</a>
                                           
                                     </td>
-                                    
                                     </tr>
                                 <?php
 
@@ -112,6 +120,42 @@ require 'dbconnection.php'
                         }   
                         
                         ?>
+
+                    
+                      
+                  </table>
+                  <div class="table-responsive p-3">
+                  <table class="table align-items-center table-flush table-hover">
+                    <thead class="thead-light">
+                      <tr>
+                        
+                        <th>Applicant FullName</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Applied Position</th>
+                        
+                      </tr>
+                      </thead>
+                      <tbody>
+                        <?php
+                        $queryy = "SELECT * FROM tbl_application WHERE status=2";
+                        $query_run = mysqli_query($conn, $queryy);
+
+                        while($application=mysqli_fetch_assoc($query_run)) 
+                        {
+                          ?>
+                            <tr>
+                                    
+                              <td><?php echo$application['fullname'];?></td>
+                              <td><?=$application['email'];?></td>
+                              <td><?=$application['phone'];?></td>
+                              <td><?=$res['vaccancy_position'];?></td>
+                              
+                            </tr>
+                            <?php
+                        }
+                        ?>
+          
 
                     
                       

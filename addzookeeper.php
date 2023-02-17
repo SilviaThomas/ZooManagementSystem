@@ -1,7 +1,16 @@
-<!DOCTYPE html>
 <html lang="en">
 
 <head>
+<script type="text/javascript">
+        function preventBack() {
+      <!DOCTYPE html>
+      window.history.forward(); 
+        }
+          
+        setTimeout("preventBack()", 0);
+          
+        window.onunload = function () { null };
+    </script>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -41,95 +50,22 @@
       <div id="content">
         <!-- TopBar -->
         <?php include('includes/header.php');?>
-        <!DOCTYPE html>   
-<html>   
-<head>  
-<meta name="viewport" content="width=device-width, initial-scale=1">  
-<title> Login Page </title>  
-<style>   
-Body {  
-  font-family: Calibri, Helvetica, sans-serif;  
-  background-color: pink;  
-}  
-button {   
-       background-color: #4CAF50;   
-       width: 100%;  
-        color: orange;   
-        padding: 15px;   
-        margin: 10px 0px;   
-        border: none;   
-        cursor: pointer;   
-         }   
- form {   
-        border: 3px solid #f1f1f1;   
-    }   
- input[type=text], input[type=password] {   
-        width: 100%;   
-        margin: 8px 0;  
-        padding: 12px 20px;   
-        display: inline-block;   
-        border: 2px solid green;   
-        box-sizing: border-box;   
-    }  
- button:hover {   
-        opacity: 0.7;   
-    }   
-  .cancelbtn {   
-        width: auto;   
-        padding: 10px 18px;  
-        margin: 10px 5px;  
-    }   
-        
-     
- .container {   
-        padding: 25px;   
-        background-color: lightblue;  
-    }   
-</style>   
-</head>    
-<body>    
-    <center> <h1> ZOO KEEPER ADD FORM </h1> </center>   
-    <form>  
-        <div class="container">   
-            <label>Username : </label>   
-            <input type="text" placeholder="Enter Username" name="username" required>  
-            <label>Password : </label>   
-            <input type="password" placeholder="Enter Password" name="password" required>  
-            <button type="submit">ADD</button>   
-              
-        </div>   
-    </form>     
-</body>     
-</html>  
         <!-- Topbar -->
 
-        <!-- Container Fluid-->
+
         
-        <!--Row-->
-
-        <!-- Modal Logout -->
-        <?php include('includes/modal.php');?>
-
-      </div>
-      <!---Container Fluid-->
-    </div>
-  
-  </div>
-</div>
-
-<!-- Scroll to top -->
-<a class="scroll-to-top rounded" href="#page-top">
-  <i class="fas fa-angle-up"></i>
-</a>
-
-<script src="vendor/jquery/jquery.min.js"></script>
-<script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="vendor/jquery-easing/jquery.easing.min.js"></script>
-<script src="js/ruang-admin.min.js"></script>
-
-</body>
-
-</html>
+<html>
+<head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="X-UA-Compatible" content="ie=edge">
+        <title>Sign Up Form </title>
+        <script src="js/registerjs.js"></script>
+        <link href="css/registercss.css" rel="stylesheet" />
+        
+        
+    </head>
+    <body>
 <?php
   $conn = mysqli_connect('localhost','root','','zooproject');
   
@@ -143,14 +79,10 @@ button {
       $lastname = $_POST['lastname'];
       $email= $_POST['email'];
       $log_password = $_POST['log_password'];
-      $housename = $_POST['housename'];
-      $street = $_POST['street'];
-      $city=$_POST['city'];
-      $state=$_POST['state'];
-      $pincode=$_POST['pincode'];
-      $adharno=$_POST['adharno'];
-      $gender=$_POST['gender'];
-      $contactno=$_POST['contactno'];
+      
+
+      // echo $email." : ".$log_password;
+
     //  $date=date($_POST['Date']);
       // $query    = "SELECT * FROM `registration`";
       //    $result = mysqli_query($conn, $query);
@@ -163,9 +95,9 @@ button {
     // else
     // {
 
-      $log_sql = "INSERT INTO tbl_login VALUES (null,'$email','$log_password',0)";
+      $log_sql = "INSERT INTO tbl_login VALUES (null,'$email','$log_password',0,1)";
       if(mysqli_query($conn, $log_sql)){
-          $result = mysqli_query($conn, "SELECT login_id FROM tbl_login where email='$email'");
+          $result = mysqli_query($conn, "SELECT * FROM tbl_login where email='$email'");
           $login_res= mysqli_fetch_array($result);
           $login_id= $login_res['login_id'];
           // while ($temp = mysqli_fetch_assoc($result)) {
@@ -173,13 +105,18 @@ button {
           // }
           //header("Location: index.html");
           
-          $sql = "INSERT INTO tbl_registration VALUES(null,$login_id,'$firstname','$lastname','$housename','$street','$city','$state',$pincode,'$gender',$adharno,$contactno)";
-          
-          //echo $sql;
+          $sql = "INSERT INTO `tbl_registration` VALUES(null, $login_id, '$firstname', '$lastname')";
+          // -- echo $sql;
           if(mysqli_query($conn, $sql)){
+          
+            
+             
              header("Location:index.php");
+             
           }
-          mysqli_close($conn);
+          else{
+            echo "<script>alert('Added');</script>";
+          }
       }
       else{
         echo " failed !!";
@@ -189,3 +126,75 @@ button {
   //}
   
 ?>
+        <div class="main">
+
+            <section class="signup">
+                <!-- <img src="images/signup-bg.jpg" alt=""> -->
+                <div class="container">
+                    <div class="signup-content">
+                        <form action="addzookeeper.php" method="POST" id="signup-form" onsubmit="lo" class="signup-form">
+                     
+
+                     <h2 class="form-title">Create account</h2>
+                            
+                            <div class="form-group">
+                                <input type="text" class="form-input" name="firstname" id="fname" placeholder="firstname"  required onblur="return fnameValidate()"/>
+                            </div>
+                            <div><span id="fnameValidate" class="validate"></span></div>
+                            <div class="form-group">
+                                <input type="text" class="form-input" name="lastname" id="lname" placeholder="lastname" required onblur="return lnameValidate()" />
+                            </div>
+                            <div><span id="lnameValidate" class="validate"></span></div>
+                                
+                            
+                     
+                            <div class="form-group">
+                                <input type="email" class="form-input" name="email"  placeholder="Email Id" required/>
+                            </div>
+
+                            <div class="form-group">
+                                <input type="password" class="form-input" name="log_password" id="log_password" placeholder="Password" required onblur="return validatepwd()"/>
+                                <span toggle="#log_password" class="zmdi zmdi-eye field-icon toggle-password"></span>
+                            </div>
+                            <div><span id="validatepwd" class="validate"></span></div>
+
+                            
+                            
+                            
+                            <div class="form-group">
+                                <input type="checkbox" name="agree-term" id="agree-term" class="agree-term" required />
+                                <label for="agree-term" class="label-agree-term"><span><span></span></span>I agree all the information </label>
+                            </div>
+                            <div >
+                            <input type="submit" name ="submit" class="btn btn-warning" value="ADD"/>
+                            
+                            </div>
+                            
+                        </form>
+
+                        <!-- <p class="loginhere">
+                            
+                          Have already an account ? <a href="Login.php" class="loginhere-link">Login here</a>  
+                          <p><p></p><center><a href="index.php">Back to Home</a>&nbsp;&nbsp;&nbsp;</center>
+                        </p></p></div> -->
+
+                    </div>
+                </div>
+            </section>
+
+        </div>
+  
+<style>
+   
+/*# sourceMappingURL=style.css.map */
+
+</style>
+        <!-- JS -->
+        <script src="reg/vendor/jquery/jquery.min.js"></script>
+        <script src="reg/js/main.js"></script>
+        <script src="script.js"></script>
+    </body><!-- This templates was made by Colorlib (https://colorlib.com) -->
+</html>
+
+
+   

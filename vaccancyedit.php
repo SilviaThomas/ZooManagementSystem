@@ -4,21 +4,28 @@ include ('dbconnection.php');
 date_default_timezone_set('Asia/Kolkata');// change according timezone
 $currentTime = date( 'd-m-Y h:i:s A', time () );
 
-if(isset($_POST['update_animal']))
+if(isset($_POST['update_vaccancy']))
 {
-    $animal_id=$_POST['animal_id'];
-    $AnimalName=$_POST['AnimalName'];
-    $Breed=$_POST['Breed'];
-    $CageNumber = $_POST['CageNumber'];
+  $vaccancy_id=$_POST['vaccancy_id'];
+  $vaccancy_position = $_POST['vaccancy_position'];
+  $vaccancy_description = $_POST['vaccancy_description'];
+
+  $vaccancy_type = $_POST['vaccancy_type'];
+  $start_date = $_POST['start_date'];
+  $end_date = $_POST['end_date'];
+    // $animal_id=$_POST['animal_id'];
+    // $AnimalName=$_POST['AnimalName'];
+    // $Breed=$_POST['Breed'];
+    // $CageNumber = $_POST['CageNumber'];
     // $Description = $_POST['Description'];
-    $query="UPDATE tbl_animals SET AnimalName='$AnimalName',Breed='$Breed',CageNumber='$CageNumber' where animal_id=$animal_id";
+    $query="UPDATE tbl_vaccancy SET vaccancy_position='$vaccancy_position',vaccancy_description='$vaccancy_description',vaccancy_type='$vaccancy_type',start_date='$start_date',end_date='$end_date' where vaccancy_id=$vaccancy_id";
     $query_run=mysqli_query($conn,$query);
     if($query_run)
     {
         $_SESSION['status'] = "updated successfully";
 		echo "
 		<script>alert('Updation successfully done.');
-		window.location.href= 'manage_animals.php';
+		window.location.href= 'add_vaccancy.php';
 		</script>";
     }
     else
@@ -31,8 +38,8 @@ if(isset($_POST['update_animal']))
 
 <?php
 	if(isset($_GET['id'])){
-		$animal_id=$_GET['id'];
-		$query=mysqli_query($conn,"select * from tbl_animals where animal_id=$animal_id");
+		$vaccancy_id=$_GET['id'];
+		$query=mysqli_query($conn,"select * from tbl_vaccancy where vaccancy_id=$vaccancy_id");
 		if(mysqli_num_rows($query)==1){
 			$row=mysqli_fetch_array($query);
 		}
@@ -113,58 +120,35 @@ if(isset($_POST['update_animal']))
 
                 <div class="card-body">
                     
-                
-                 
-                <form class="form-sample" method="post" enctype="multipart/form-data">
-                    <div class="row">
-                    <input type="hidden" name="animal_id" value="<?= $row['animal_id'] ?>">
-                      <div class="form-group col-md-6">
-                        <label class="col-sm-12 pl-0 pr-0">Animal Name</label>
-                        <div class="col-sm-12 pl-0 pr-0">
-                        <input type="text" class="form-control" name="AnimalName" placeholder="AnimalName" value="<?php echo $row['AnimalName'] ?>" required>
-                        </div>
-                      </div>
-                      <div class="form-group col-md-6 pl-md-0">
-                        <label class="col-sm-12 pl-0 pr-0">Cage Number</label>
-                        <div class="col-sm-12 pl-0 pr-0">
-                          <input type="text" class="form-control" name="CageNumber" value="<?php echo $row['CageNumber'];?>"  required>
-                        </div>
-                      </div>
-                    </div>
-
-                    <!-- <div class="row">
-                      <div class="form-group col-md-6">
-                        <label class="col-sm-12 pl-0 pr-0">Feed Number</label>
-                        <div class="col-sm-12 pl-0 pr-0">
-                         <input type="text" class="form-control" name="FeedNumber" id="feed" placeholder=" Feed Number" required>
-                       </div>
-                     </div> -->
-                     <div class="row">
-                      <label class="col-sm-12 pl-0 pr-0">Breed</label>
-                      <div class="col-sm-12 pl-0 pr-0">
-                        <input type="text" class="form-control" name="Breed" id="breed" value="<?php echo $row['Breed'];?>" required>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- <div class="row">
-                    <div class="form-group col-md-6 pl-md-0">
-                        <label class="col-sm-12 pl-0 pr-0">Animal Details</label>
-                        <div class="col-sm-12 pl-0 pr-0">
-                            <textarea class="form-control" rows="5" cols="50" name="Description" id="details" value="<?php echo $row['Description'];?>" required></textarea> 
-                        </div>
-                    </div>
-                    <div class="form-group col-md-4 ">
-                        <label class="col-sm-12 pl-0 pr-0 ">Attach Animal Image</label>
-                        <div class="col-sm-12 pl-0 pr-0">
-                            <input type="file" name="AnimalImage" id="animalimage" value="<?php echo $img;?>" required>
-                        </div>
-                     </div> 
-                    </div> -->
-                    <button type="submit" name="update_animal" value="update" class="btn-primary btn">Update Animal</button>
-                    <button class="btn" type="submit" name="save" >Save</button>
-                  
-                    <!-- <button type="reset" class="btn-inverse btn">Reset</button> -->
-                </form>
+                <form action="#" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="vaccancy_id" value="<?= $row['vaccancy_id'] ?>">
+                <div class="mb-4 field-required">
+                    <label for="class_display_name">Position</label>
+                    <input type="text" class="form-control" id="class_display_name" placeholder="Eg: Receptionist" name="vaccancy_position" value="<?php echo $row['vaccancy_position'] ?>"required>
+                </div>
+                <div class="mb-4 field-required">
+                    <label for="v_description">Description</label>
+                    <textarea name="vaccancy_description" placeholder="...." class="form-control" id="vaccancy_description" cols="30" rows="5"  required><?php echo $row['vaccancy_description'] ?></textarea>
+                </div>
+                <div class="mb-4 field-required">
+                    <label for="v_type">Vacancy Type</label>
+                    <select class="custom-select d-block w-100" name="vaccancy_type" id="vaccancy_type" value="<?php echo $row['vaccancy_type'] ?>" required >
+                        <option value="permanent" >Permanent</option>;
+                        <option value="temporary" >Temporary</option>;
+                    </select>
+                </div>
+                <div class="mb-4 field-required">
+                    <label for="v_start_date">Contract Start Date</label>
+                    <input type="date"  name= "start_date"  class="form-control" name="start_date" id="start_date" value="<?php echo $row['start_date'] ?>" required>
+                </div>
+                <div class="mb-4">
+                    <label for="v_end_date">Contract End Date</label>
+                    <input type="date" name= "end_date" class="form-control" name="end_date" id="end_date" value="<?php echo $row['end_date'] ?>">
+                    <small>For temporary vacancy</small>
+                </div>
+                <button type="submit" name="update_vaccancy" value="update" class="btn-primary btn">Update Vaccancy</button>
+            </form>
+               
             </div>
             </div>
 

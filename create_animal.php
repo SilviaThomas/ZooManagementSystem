@@ -1,10 +1,10 @@
-<!DOCTYPE html>
 <html lang="en">
 
 <head>
 <script type="text/javascript">
         function preventBack() {
-            window.history.forward(); 
+      <!DOCTYPE html>
+      window.history.forward(); 
         }
           
         setTimeout("preventBack()", 0);
